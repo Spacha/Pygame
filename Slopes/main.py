@@ -182,12 +182,19 @@ class Player(GameObject):
 		# construct the parent
 		GameObject.__init__(self, 'Player')
 
+		self.max_velocity = 2.5
+		self.jump_strength = 5.0
+
 		self.height = height
 		self.width = width
 		self.color = clr
 
 		self.position.x = x
 		self.position.y = y
+
+		# Instructions
+		self._move_left = False
+		self._move_right = False
 
 	def draw(self, scr):
 		"""
@@ -203,19 +210,17 @@ class Player(GameObject):
 		return pg.Rect(self.position.x, self.position.y, self.width, self.height)
 
 	# Controls
-	def move_left(self):
-		self.velocity.x = -2.5
+	# TODO: use setters
+	def move_left(self, move=True):
+		self.velocity.x += (-1 if move else 1)*self.max_velocity
 
-	def move_right(self):
-		self.velocity.x = 2.5
-
-	def stop(self):
-		self.velocity.x = 0.0
+	def move_right(self, move=True):
+		self.velocity.x += (1 if move else -1)*self.max_velocity
 
 	def jump(self):
 		# player can only jump if it's on the ground
 		if self.on_ground:
-			self.velocity.y = -5.0
+			self.velocity.y = -self.jump_strength
 
 
 """
@@ -298,7 +303,7 @@ class Ground(GameObject):
 # -------------------------------
 #         INIT THE GAME
 # -------------------------------
-FPS = 60.0
+FPS = 100.0
 # SCR_SIZE = (700, 800)
 SCR_SIZE = (800, 400)
 
@@ -330,13 +335,15 @@ while not exit:
 			if event.key == pg.K_SPACE:
 				player.jump()
 			if event.key == pg.K_LEFT:
-				player.move_left()
+				player.move_left(True)
 			if event.key == pg.K_RIGHT:
-				player.move_right()
+				player.move_right(True)
 
 		if event.type == pg.KEYUP:
-			if event.key == pg.K_LEFT or event.key == pg.K_RIGHT:
-				player.stop()
+			if event.key == pg.K_LEFT:
+				player.move_left(False)
+			if event.key == pg.K_RIGHT:
+				player.move_right(False)
 
 	# -------------------------------
 	#         Update Game
