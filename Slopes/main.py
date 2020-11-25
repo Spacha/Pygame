@@ -62,8 +62,8 @@ class Game():
 		ground_h = self.ground.height_at(obj.position.x)
 
 		# if the object is on (or below) the surface
-		if obj.bottom() >= ground_h:
-			obj.position.y = ground_h - obj.height # set position on the surface
+		if obj.bottom() >= (ground_h + self.ground.sink):
+			obj.position.y = ground_h - obj.height + self.ground.sink
 
 			if not obj.on_ground:
 				obj.on_ground = True
@@ -238,10 +238,12 @@ class Ground(GameObject):
 		self.position.y = y
 
 		# the image that represents the ground
-		IMG_FILENAME = "hills1.png"
+		IMG_FILENAME = "hills2.png"
 		self.sprite = pg.image.load(IMG_FILENAME)
 		self.bitmap = Image.open(IMG_FILENAME)
 		self.img_to_map()
+
+		self.sink = 5 		# how much the ground should give up
 
 	def draw(self, scr):
 		"""
@@ -286,7 +288,11 @@ class Ground(GameObject):
 		bitmap = np.array(self.bitmap)
 
 		# For each pixel: [0,0,0,0] => False, otherwise True
-		bitmap = np.any(bitmap, axis=2)
+		#bitmap = np.any(bitmap[::-1], axis=2)
+
+		# Ok, this is different:
+		# last element of each pixel value (= alpha) > 0 => True
+		bitmap = bitmap[:,:,-1] > 20
 
 		# initialize an empty array for the final height map
 		self.height_map = np.zeros(bitmap.shape[1], dtype=int)
