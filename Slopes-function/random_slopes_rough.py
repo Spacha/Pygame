@@ -45,8 +45,8 @@ def move_map(map, speed):
 
 	return map
 
-map_y = np.zeros(SCR_SIZE[0])
-map_x = np.arange(MAP_SIZE_X)
+map_y = np.zeros(SCR_SIZE[0], dtype=int)
+map_x = np.arange(MAP_SIZE_X, dtype=int)
 
 # populate the map with random points
 for x in range(len(map_y)):
@@ -75,7 +75,6 @@ while not exit:
 
 	# scroll the map forward
 	map_y = move_map(map_y, scroll_speed)
-	print(map_y)
 
 	# Draw the Player
 	pg.draw.rect(scr, CLR_BLUE, pg.Rect( player.x, player.y, 10, 10 ))
