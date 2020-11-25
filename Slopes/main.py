@@ -278,18 +278,12 @@ class Ground(GameObject):
 				   from each. That is the surface pixel and these form the height map.
 		"""
 
-		# this little function is applied to each element (pixel) of the image and
-		# essentially converts the 4 channels into single truth value
-		def pxl_is_ground(px):
-			return px > 0
-
 		bitmap = np.array(self.bitmap)
 
-		# apply the function so that we are left with a 2d array (e.g. bitmap[0][0] = False)
-		bitmap = np.apply_along_axis(pxl_is_ground, 2, bitmap)
+		# For each pixel: [0,0,0,0] => False, otherwise True
 		bitmap = np.any(bitmap, axis=2)
 
-		# initialize an empty array gor the final heigh map
+		# initialize an empty array for the final height map
 		self.height_map = np.zeros(bitmap.shape[1], dtype=int)
 		for x, col in enumerate(bitmap.T):
 			for y, is_ground in enumerate(col): # 
