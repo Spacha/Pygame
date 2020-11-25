@@ -238,7 +238,7 @@ class Ground(GameObject):
 		self.position.y = y
 
 		# the image that represents the ground
-		IMG_FILENAME = "hills2.png"
+		IMG_FILENAME = "hills1.png"
 		self.sprite = pg.image.load(IMG_FILENAME)
 		self.bitmap = Image.open(IMG_FILENAME)
 		self.img_to_map()
@@ -310,8 +310,7 @@ class Ground(GameObject):
 #         INIT THE GAME
 # -------------------------------
 FPS = 100.0
-# SCR_SIZE = (700, 800)
-SCR_SIZE = (800, 400)
+SCR_SIZE = (700, 600)
 
 game = Game(SCR_SIZE, FPS)
 
