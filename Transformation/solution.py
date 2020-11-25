@@ -14,14 +14,14 @@ def to_pixels(x, y):
 	global offset_x, offset_y
 	center_x = (WIDTH // 2) + offset_x
 	center_y = (HEIGHT // 2) + offset_y
-	return center_x + x, center_y - y
+	return int(center_x + x), int(center_y - y)
  
  
 def to_cartesian(pW, pH) -> tuple:
 	global offset_x, offset_y
-	center_x = (WIDTH // 2) + offset_x
-	center_y = (HEIGHT // 2) + offset_y
-	return (pW - center_x), -(pH - center_y)
+	center_x = (WIDTH / 2) + offset_x
+	center_y = (HEIGHT / 2) + offset_y
+	return pW - center_x, -pH - center_y
  
  
 pX, pY = 0, 0
