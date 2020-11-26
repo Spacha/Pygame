@@ -30,7 +30,7 @@ drag = 0.0
 def vertical_velocity():
     global force, drag
     vel =  force / (drag + 1)
-    drag += 0.1
+    drag += 0.05
     return vel
 
 go = True
