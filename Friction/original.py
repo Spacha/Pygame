@@ -2,6 +2,11 @@
 from random import randint
 import pygame
 from pygame.locals import *
+
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+
 pygame.init()
 
 
@@ -27,11 +32,37 @@ player_rect = pygame.Rect(player_location[0], player_location[1], player.get_wid
 missile_rect = pygame.Rect(missile_loc[0], missile_loc[1], missile.get_width(), missile.get_height())
 
 drag = 0.0
-def vertical_velocity():
+def vertical_velocity_nonlinear():
     global force, drag
     vel =  force / (drag + 1)
     drag += 0.05
     return vel
+
+def vertical_velocity_linear():
+    global force, drag
+    vel = force + (1-1/4*drag)
+    vel = vel if (vel >= 0) else 0.0
+    drag += 0.05
+    return vel
+
+v1 = np.zeros(100)
+v2 = np.zeros(100)
+t = np.arange(100)
+
+for i in range(100):
+    v1[i] = vertical_velocity_nonlinear()
+
+drag = 0.0
+
+for i in range(100):
+    v2[i] = vertical_velocity_linear()
+
+fig, ax = plt.subplots(2)
+ax[0].plot(t, v1)
+ax[1].plot(t, v2)
+plt.show()
+
+
 
 go = True
 while go:
@@ -46,9 +77,9 @@ while go:
     # player_location[1] *= friction
 
     if up == True:
-        player_location[1] -= vertical_velocity()
+        player_location[1] -= vertical_velocity_linear()
     if down == True:
-        player_location[1] += vertical_velocity()
+        player_location[1] += vertical_velocity_linear()
 
     for event in pygame.event.get():
         if event.type == QUIT:
